@@ -6,7 +6,7 @@
 /*
 地图格式：
 出发城市 抵达城市 交通类型（0汽车，1火车，2飞机） 出发时间（0 y z,意为第0天y时z分） 抵达时间 花费 然后下一行
-（在输入地图时，时间中的第x天始终为0，不影响）
+（在输入地图时，时间中的第x天始终为0）
 假设地图一天一循环
 */
 
@@ -14,13 +14,17 @@
 #include"time.h"
 
 
-struct Edge //简单数据聚合，不需要封装
+//Edge,Vertex为简单数据聚合，不需要封装
+struct Edge
 {
 	Edge(Id _start = INT_MAX, Id _end = INT_MAX, unsigned int _type = INT_MAX, Time _startTime = defaultTime, Time _arriveTime = defaultTime, CostType _cost = INT_MAX) : start(_start), end(_end), type(_type), startTime(_startTime), arriveTime(_arriveTime), cost(_cost) {}
 
-	Id start;//出发城市的id
-	Id end;//抵达城市的id
-	unsigned int  type;//交通方式
+	//出发城市的id
+	Id start;
+	//抵达城市的id
+	Id end;
+	//交通方式
+	unsigned int type;
 	Time startTime, arriveTime;
 	CostType cost;
 };
@@ -31,42 +35,42 @@ struct Vertex //简单数据聚合，不需要封装
 	Vertex(string _cityName) :cityName(_cityName) {}
 
 	string cityName;
-	vector<Edge> to;//从此城市出发能到达的城市
+	// 从此城市出发的边
+	vector<Edge> to;
 };
 
 
 class Graph
 {
 public:
+	//以文件输入流file初始化Graph
 	Graph(ifstream& file);
 
-	unsigned int size() const;
-
+	//增加城市，返回该城市的Id
 	Id addCity(const string& cityName);
 
+	//若已有该城市返回true，否则返回false
 	bool hasCity(const string& cityName);
 
+	//返回该城市的Id
 	Id getId(const string& cityName);
 
+	//获取该城市的结点指针
 	Vertex* getCity(const string& cityName);
 
 	const string& getCityName(Id id);
 
-	const vector<Vertex>& getVertexs();//获取vertexs的接口，供RouteDesign使用
+	//获取vertexs的接口，供RouteDesign使用
+	const vector<Vertex>& getVertexs();
 
 
 private:
-	vector<Vertex> vertexs;//所有城市
-	//城市名与ID的hash表，基本全程均使用Id而不是string或引用来标识，减少空间，提高效率
+	//所有城市
+	vector<Vertex> vertexs;
+	//hash表,将城市名映射到Id,全程均使用Id而不是string/引用/指针来标识，减少使用的空间，提高效率
 	unordered_map<string, Id> cities;
 };
 
-
-
-inline unsigned int Graph::size() const
-{
-	return vertexs.size();
-}
 
 
 inline bool Graph::hasCity(const string& cityName)

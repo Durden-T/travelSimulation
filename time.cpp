@@ -48,11 +48,18 @@ bool operator<(const Time& lhs, const Time& rhs)
 
 Time& Time::advanceTo(const Time& after)
 {
+	//若after的时间不为0,说明是现实中的时间而非地图中,因此当前的day前进after.day天
 	if (after.day)
 		day += after.day;
+	//after为地图时间，当前时间超过了地图时间(只看hour,minute)
 	else if (hour > after.hour || hour == after.hour && minute > after.minute)
+	{
+		//转移到下一天
 		++day;
+	}
+
 	hour = after.hour;
 	minute = after.minute;
+
 	return *this;
 }

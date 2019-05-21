@@ -10,8 +10,8 @@
 #include<sstream>
 #include<queue>
 #include <ctime>
-#include<windows.h>
-#include<conio.h>
+#include<windows.h>     //Sleep()
+#include<conio.h>       //_kbhit() 非阻塞检测键盘输入
 
 
 using namespace std;
@@ -22,15 +22,19 @@ using namespace std;
 #define NONE nullptr
 
 
-enum { minTime = 1, minCost, minCostWithTimeLimited };//旅行策略
-enum { CAR, TRAIN, PLANE };//交通方式
-const string EXIT ("#exit");
+//旅行策略
+enum { minTime = 1, minCost, minCostWithTimeLimited };
+//交通方式
+enum { CAR, TRAIN, PLANE };
+const string EXIT("#exit");
+//模拟一小时的实际时间
 const time_t oneFakeHour(500);
 
 #ifndef TIME_H
 
 #include"time.h"
-const Time defaultTime;//Time默认初始化，用于判断
+//默认初始化的Time，用于判断
+const Time defaultTime;
 
 #endif
 

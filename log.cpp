@@ -7,13 +7,11 @@ void Log::reset(const Time& startTime, const string& startCityName, const string
 {
 	// 基于当前系统的当前日期/时间
 	time_t now = time(NULL);
-
 	// 把 now 转换为字符串形式,打印当前时间
 	char* dt = ctime(&now);
-
 	file << dt;
 	if (changed)
-		file << "中途改变计划";
+		file << "中途改变计划" << endl;
 	file << "出发时间：" << startTime << ",出发城市：" << startCityName << ",目的城市：" << endCityName << ",旅行策略：" << strategyTable[mode] << ",途径城市：";
 
 	//输出要求的途经城市
@@ -27,30 +25,38 @@ void Log::reset(const Time& startTime, const string& startCityName, const string
 		file << "无";
 	if (mode == minCostWithTimeLimited)
 		file << ",限制时间：" << limitTime;
+
 	file << endl;
 }
 
-void Log::update(Graph& G, CostType lastCost, vector<const Edge*>& path)
+void Log::showResult(Graph& G, CostType lastCost, vector<const Edge*>& path)
 {
 	file << "路线：" << endl;
 	CostType cost = lastCost;
 	Time time(0, 0, 0);
+
 	//输出沿途信息
 	for (const Edge* e : path)
 	{
+		//时间转到出发时间
 		time.advanceTo(e->startTime);
 		cost += e->cost;
+		//输出边的信息
 		file << time << ":\t" << travelTypeTable[e->type] << '\t' << G.getCityName(e->start) << "->" << G.getCityName(e->end) << "\t目前花费：" << cost << "元" << endl;
+		//时间转到到达时间
 		time.advanceTo(e->arriveTime);
 	}
+
 	file << "到达时间：" << time << ",花费：" << cost << "元。" << endl;
 }
 
 Log::Log()
 {
+	//打开日志的输出文件流
 	file.open("C:\\travelSimulation\\log.txt", ios::app);
 }
 Log::~Log()
 {
+	//关闭文件流
 	file.close();
 }

@@ -4,39 +4,41 @@
 
 
 #include"common.h"
-//#include "time.h"
 
-
-class Time;
-class RouteDesign;
-class Graph;
+//前向声明,分离编译
 struct Edge;
+class Graph;
+
 
 
 class Log
 {
 public:
-	static Log& Instance()//Singleton
+	//Singleton method
+	static Log& Instance()
 	{
 		static Log Instance;
 		return Instance;
 	}
 
+	//将用户新的输入写入log,changed参数默认为false,若为true标志这次的reset是中途改变的
+	void reset(const Time& startTime, const string& startCityName, const string& endCityName, unsigned int mode, const Time& limitTime, vector<string>& passBy, bool changed = false);
 
-	void reset(const Time& startTime, const string& startCityName, const string& endCityName, unsigned int mode, const Time& limitTime, vector<string>& passBy,bool changed=false);//获取新的用户输入，写入log并通知RouteDesign进行设计
-
-	void update(Graph& G, CostType lastCost,vector<const Edge*>& path);
+	//考虑到可能中途发生过改变,传参数lastCost,输出时cost从lastCost开始计算
+	void showResult(Graph& G, CostType lastCost, vector<const Edge*>& path);
 
 protected:
-	//Singleton
+	//Singleton method
 	Log();
 	~Log();
 
 
 private:
+	//文件输出流
 	ofstream file;
-	vector<string> strategyTable{ "", "最少时间", "最少花费", "限时最少花费" };//策略表，与enum结合便于coding
-	vector<string> travelTypeTable = { "汽运", "火车", "飞机" };
+	//策略表,与enum结合便于coding,提高可读性
+	vector<string> strategyTable{ "", "最少时间", "最少花费", "限时最少花费" };
+	vector<string> travelTypeTable{ "汽运", "火车", "飞机" };
 };
 
 
