@@ -12,8 +12,8 @@ Graph::Graph(ifstream& file)
 	CostType cost;
 	string startCityName, endCityName;
 
-	//每次读取一行,输入#exit退出
-	while (getline(file, buf) && buf != EXIT)
+	//每次读取一行
+	while (getline(file, buf))
 	{
 		//分割行 获取有效信息
 		istringstream input(buf);

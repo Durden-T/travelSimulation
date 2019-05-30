@@ -120,9 +120,7 @@ bool RouteDesign::design()
 {
 	//委托给strategy实现
 	//若无路线返回false
-	if (!strategy->design())
-		return false;
-	return true;
+	return strategy->design();
 }
 
 

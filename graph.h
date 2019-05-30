@@ -43,8 +43,12 @@ struct Vertex //简单数据聚合，不需要封装
 class Graph
 {
 public:
-	//以文件输入流file初始化Graph
-	Graph(ifstream& file);
+	//Singleton method
+	static Graph& Instance(ifstream& file)
+	{
+		static Graph Instance(file);
+		return Instance;
+	}
 
 	//增加城市，返回该城市的Id
 	Id addCity(const string& cityName);
@@ -63,7 +67,12 @@ public:
 	//获取vertexs的接口，供RouteDesign使用
 	const vector<Vertex>& getVertexs();
 
+protected:
+	//Singleton method
+	//以文件输入流file初始化Graph
+	Graph(ifstream& file);
 
+	~Graph() = default;
 private:
 	//所有城市
 	vector<Vertex> vertexs;

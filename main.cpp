@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
 	//依次创建单例
 	Log& L = Log::Instance();
-	Graph G(file);
+	Graph& G=Graph::Instance(file);
 	RouteDesign& R = RouteDesign::Instance(G, L);
 
 	while (true)

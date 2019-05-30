@@ -39,14 +39,17 @@ bool MinTime::design()
 		//若赶不上自动切换下一天
 		cur.advanceTo(tmpPath[nextStart]->startTime).advanceTo(t);
 
-		nextStart = tmpPath.size();
-		//连接当前的排列过的passBy的各个结点
-		t = midDijkstra(tmpPath, cur);
-		//若无结果,直接进行下一次排列
-		if (t == defaultTime)
-			continue;
-		//若赶不上自动切换下一天
-		cur.advanceTo(tmpPath[nextStart]->startTime).advanceTo(t);
+		if (passBy.size() != 1)
+		{
+			nextStart = tmpPath.size();
+			//连接当前的排列过的passBy的各个结点
+			t = midDijkstra(tmpPath, cur);
+			//若无结果,直接进行下一次排列
+			if (t == defaultTime)
+				continue;
+			//若赶不上自动切换下一天
+			cur.advanceTo(tmpPath[nextStart]->startTime).advanceTo(t);
+		}
 
 		nextStart = tmpPath.size();
 		//连接当前的排列过的passBy的最后一个与终点
@@ -109,7 +112,7 @@ Time MinTime::Dijkstra(Id start, Id end, vector<const Edge*>& path, const Time& 
 			}
 		}
 	}
-	
+
 	//结果有效
 	if (time[end] != defaultTime)
 	{
@@ -132,19 +135,16 @@ Time MinTime::Dijkstra(Id start, Id end, vector<const Edge*>& path, const Time& 
 Time MinTime::midDijkstra(vector<const Edge*>& path, const Time& startTime)
 {
 	Time ans = startTime;
-	if (passBy.size() != 1)
+	for (int i = 0; i < passBy.size() - 1; ++i)
 	{
-		for (int i = 0; i < passBy.size() - 1; ++i)
-		{
-			int nextStart = path.size();
-			//连接i和i+1
-			Time t = Dijkstra(passBy[i], passBy[i + 1], path, ans);
-			//若无结果
-			if (t == defaultTime)
-				continue;
-			//时间转移
-			ans.advanceTo(path[nextStart]->startTime).advanceTo(t);
-		}
+		int nextStart = path.size();
+		//连接i和i+1
+		Time t = Dijkstra(passBy[i], passBy[i + 1], path, ans);
+		//若无结果
+		if (t == defaultTime)
+			continue;
+		//时间转移
+		ans.advanceTo(path[nextStart]->startTime).advanceTo(t);
 	}
 	return ans;
 }
