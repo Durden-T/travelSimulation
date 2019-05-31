@@ -44,7 +44,7 @@ class Graph
 {
 public:
 	//Singleton method
-	static Graph& Instance(ifstream& file)
+	static Graph& Instance(const string& file)
 	{
 		static Graph Instance(file);
 		return Instance;
@@ -70,7 +70,7 @@ public:
 protected:
 	//Singleton method
 	//以文件输入流file初始化Graph
-	Graph(ifstream& file);
+	Graph(const string& file);
 
 	~Graph() = default;
 private:

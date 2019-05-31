@@ -52,8 +52,20 @@ void Log::showResult(Graph& G, CostType lastCost, vector<const Edge*>& path)
 
 Log::Log()
 {
+	//设置文件名为当前时间
+	time_t now = time(NULL);
+	// 把 now 转换为字符串形式
+	char* dt = ctime(&now);
+	string f = dt;
+	//使文件名合法
+	for (char& c : f)
+		if (c == ':')
+			c = '.';
+	f.pop_back();
+	f += ".txt";
+
 	//打开日志的输出文件流
-	file.open("C:\\travelSimulation\\log.txt", ios::app);
+	file.open(f, ios::app);
 }
 Log::~Log()
 {

@@ -2,8 +2,15 @@
 
 
 
-Graph::Graph(ifstream& file)
+Graph::Graph(const string& file)
 {
+	ifstream f(file);
+	//打开失败
+	if (!f)
+	{
+		cout << "无法打开文件。" << endl;
+		exit(-1);
+	}
 	//准备临时变量
 	string buf;
 	Id start, end;
@@ -13,7 +20,7 @@ Graph::Graph(ifstream& file)
 	string startCityName, endCityName;
 
 	//每次读取一行
-	while (getline(file, buf))
+	while (getline(f, buf))
 	{
 		//分割行 获取有效信息
 		istringstream input(buf);
@@ -33,7 +40,7 @@ Graph::Graph(ifstream& file)
 		}
 	}
 	//读取地图完成,关闭文件流
-	file.close();
+	f.close();
 }
 
 Id Graph::addCity(const string& cityName)

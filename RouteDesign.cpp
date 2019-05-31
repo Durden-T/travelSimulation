@@ -149,7 +149,7 @@ void RouteDesign::showResult()
 
 bool RouteDesign::simulation()
 {
-	cout << "开始模拟,按任意键更改旅行计划。" << endl;
+	cout << "开始模拟,按任意键选择改变计划或添加旅客。" << endl;
 	CostType cost = lastCost;
 	Time time = startTime;
 	//输出沿途信息
@@ -165,7 +165,7 @@ bool RouteDesign::simulation()
 			cout << time << ":\t当前位置:" << G.getCityName(e->start) << endl;
 			Sleep(oneFakeHour);
 
-			//用户按键,要改变计划
+			//用户按键,要改变计划/添加旅客
 			if (_kbhit())
 			{
 				//将用户按下的键读取掉,避免污染后续输入
@@ -174,12 +174,28 @@ bool RouteDesign::simulation()
 					//从输入缓冲区读取一个字符
 					_getch();
 				}
-				//此时,出发城市应默认为当前所处的城市
-				start = e->start;
-				//记录到目前的花费,累计到更改后的计划中
-				lastCost = cost;
-				//返回false表示中途计划改变
-				return false;
+				cout << "1. 改变计划\t2. 增加旅客\t其他. 继续" << endl;
+				char c;
+				c = getchar();
+				switch (c)
+				{
+				case '1':
+					//此时,出发城市应默认为当前所处的城市
+					start = e->start;
+					//记录到目前的花费,累计到更改后的计划中
+					lastCost = cost;
+					//返回false表示中途计划改变
+					return false;
+				case '2':
+					//打开另一个自身
+					char path[MAX_PATH];
+					GetModuleFileName(NULL, (LPSTR)path, sizeof(path));  
+					ShellExecute(NULL, "open", path, NULL, NULL, SW_RESTORE);
+					break;
+				default:
+					;
+				}
+
 			}
 			//模拟时间前进一小时
 			if (time < t)

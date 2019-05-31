@@ -10,7 +10,7 @@ struct Edge;
 class Graph;
 
 
-
+//考虑到多个旅客，每次创建日志时，日志名为创建时间
 class Log
 {
 public:
